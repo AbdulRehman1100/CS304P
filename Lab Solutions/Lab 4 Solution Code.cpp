@@ -1,5 +1,8 @@
 #include <iostream>
 
+// for declaring const Employee object, we can't call non constant member functions
+//like setEmpName() in constructor, So removing them from Employee Constructor
+// Also somes change to constructor so we create const Employee by using state of other const Employee 
 
 using namespace std;
 
@@ -81,12 +84,15 @@ Employee::Employee() : id(1), name(nullptr), salary(0)
 	++count; // incrementing count by 1 when new object is created using defatult constructor
 }
 
-// Initializing Id data member to using initializer list
-Employee::Employee(int empId, const char* empName, double empSalary) : id(empId), name(nullptr), salary(0)
+// Initializing Id, salary data members to using initializer list
+Employee::Employee(int empId, const char* empName, double empSalary) : id(empId), name(nullptr), salary(salary)
 {
-	// setEmpId(empId) removed
-	setEmpName(empName);
-	setEmpSalary(empSalary);
+	
+	if(empName != nullptr)
+	{
+		name = new char [strlen(empName) + 1];
+		strcpy(name,empName);
+	}
 	
 	++count; // incrementing count by 1 when new object is created using pararmeterized constructor
 }
@@ -125,14 +131,22 @@ void Employee::display()
 	<< "\nEmployee Salary: " << salary;
 }
 
+int Employee::totalNumberOfEmployee()
+{
+	return count;
+}
+
 int main()
 {
 	
 	Employee e1(10, "A", 5000), e2(20, "B", 3000), e3(30, "C", 7000);
-	
-	int i = 0;
+	const Employee e4(40, "D", 7000);
 	
 	cout << "Employee Id: " << e1.getEmpId()
 	<< "\nEmployee Id: " << e2.getEmpId()
-	<< "\nEmployee Id: " << e3.getEmpId();
+	<< "\nEmployee Id: " << e3.getEmpId()
+	<< "\nEmployee Id: " << e4.getEmpId();
+	
+	cout << "\n\nTotal object after creation: " << Employee::totalNumberOfEmployee();
+	
 }
